@@ -1,32 +1,27 @@
 <?php
-include_once 'src/Views/partials/header.view.php';
+include_once 'Views/partials/header.view.php';
 ?>
-<div class="d-flex align-items-center py-4 bg-body-tertiary w-50 justify-content-center m-auto">
-    <main class="form-signin w-100 m-auto">
-        <form class="" action="/auth/login" method="POST">
-            <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+<div class="flex items-center py-4 bg-gray-100 w-1/2 justify-center mx-auto">
+    <main class="w-full mx-auto">
+        <form action="/auth/login" method="POST" class="bg-white p-6 rounded-lg shadow-md">
+            <h1 class="text-2xl font-semibold text-center mb-3">Connexion</h1>
 
-            <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                <label for="floatingInput">Adresse mail</label>
+            <div class="mb-3">
+                <label for="floatingInput" class="block text-sm font-medium text-gray-700">Adresse mail</label>
+                <input type="email" name="email" id="floatingInput" placeholder="name@example.com" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
-            <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Mot de passe">
-                <label for="floatingPassword">Mot de passe</label>
+            <div class="mb-3">
+                <label for="floatingPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                <input type="password" name="password" id="floatingPassword" placeholder="Mot de passe" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
-
-            <div class="form-check text-start my-3">
-                <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Remember me
-                </label>
-            </div>
-            <p>Tu n'as pas encore de compte? <a href="/auth/register">Inscription</a></p>
-            <button class="btn btn-primary w-100 py-2" type="submit">Connexion</button>
-            <p class="mt-5 mb-3 text-body-secondary">© 2017–2024</p>
+            
+            <p class="text-sm text-gray-600">Tu n'as pas encore de compte? <a href="/auth/register" class="text-blue-600 hover:underline">Inscription</a></p>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 mt-3">Connexion</button>
+            
+            <p class="mt-5 text-center text-sm text-gray-500">© 2017–2025</p>
         </form>
     </main>
 </div>
 <?php
-include_once 'src/Views/partials/footer.view.php';
+include_once 'Views/partials/footer.view.php';

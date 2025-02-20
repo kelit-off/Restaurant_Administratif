@@ -1,8 +1,6 @@
 <?php
 
-use Router\Router;
-
-require_once 'src/Router/Router.php';
+use Core\Router;
 
 $router = new Router();
 
