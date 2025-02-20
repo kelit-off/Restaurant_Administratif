@@ -19,11 +19,11 @@ class Router {
     
         if (isset($this->routes[$method][$uri])) {
             $action = explode('@', $this->routes[$method][$uri]);
-            $controller = $action[0]; 
+            $controller = "Http\\Controllers\\".$action[0]; 
             $method = $action[1];
-    
+            
             // Inclure manuellement le contrôleur si l'autoloading n'est pas configuré
-            $controllerPath = __DIR__ . '/../Controllers/' . $action[0] . '.php';
+            $controllerPath = __DIR__ . '/../Http/Controllers/' . $action[0] . '.php';
             
             if (file_exists($controllerPath)) {
                 require_once $controllerPath;  // Inclure le fichier du contrôleur
