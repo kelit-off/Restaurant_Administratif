@@ -23,6 +23,24 @@ include_once 'Views/partials/header.view.php';
     </div>
     <div>
         <!-- Les prix -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Prestation</th>
+                    <th>Category</th>
+                    <th>Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($tarifs as $tarif) { ?>
+                    <tr class="table-<?= $colors[$tarif['prestation']] ?>">
+                        <td><?= $tarif['prestation'] ?></td>
+                        <td><?= $tarif['category'] ?></td>
+                        <td><?= $tarif['price'] ?>€</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 </main>
 <?php

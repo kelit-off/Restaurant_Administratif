@@ -3,8 +3,6 @@
 namespace Http\Controllers;
 
 require_once 'src/Http/Controllers/Controller.php';
-require_once __DIR__ . "/../../Core/App.php";
-require_once __DIR__ . "/../../Core/Database.php";
 
 use Core\App;
 use Core\Session;
