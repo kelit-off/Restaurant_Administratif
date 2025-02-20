@@ -24,6 +24,23 @@ class Users extends Database {
 
         
         return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 
+    public function getListe() {
+        $query = "SELECT * FROM users";
+        $ListeUsers = $this->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+
+        $query = "SELECT * FROM droits";
+        $ListeDroit = $this->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+
+        $ListeUsersDroit = [];
+
+        foreach ($ListeUsers as $user) {
+            $ListeUsersDroit[] = [
+                "user" => $user,
+                "droit" => $ListeDroit[array_search($user['droit'], array_column($ListeDroit, 'id_droits'))],
+            ];
+        }
+        return $ListeUsersDroit;
     }
 }

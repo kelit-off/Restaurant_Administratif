@@ -9,11 +9,11 @@ class Database {
     private $pdo;
 
     public function __construct() {
-        $config = require_once 'config/main.conf.php';
+        $config = require 'config/main.conf.php';
         try {
             // Tentative de connexion avec PDO
             $this->pdo = new PDO(
-                "mysql:host={$config['database']['host']};dbname={$config['database']['dbname']}", 
+                "mysql:host={$config['database']['host']};dbname={$config['database']['dbname']}",
                 $config['database']['username'], 
                 $config['database']['password']
             );
@@ -42,7 +42,8 @@ class Database {
 
     public function find($query, array $params = []) {
         $stmt = $this->query($query, $params);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result !== false ? $result : null;
     }
 
     public function get($query, array $params = []) {
