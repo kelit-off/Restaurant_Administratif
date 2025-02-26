@@ -58,7 +58,7 @@ class AdminController extends Controller {
             "headerType" => 'admin',
             "slimHeader" => false,
             "can_add" => false,
-            "type" => 'user',
+            "type" => 'users',
             "HeadersTable" => [
                 "Prénom",
                 "Nom",
@@ -69,22 +69,40 @@ class AdminController extends Controller {
         ]);
     }
 
-    public function viewEditUsers($id) {
+    public function viewUpdateUser($id) {
         $app = new App();
         $userManager = new Users();
-        $user = $userManager->find("SELECT * FROM users WHERE id = :id", [
-            "id" => $id
-        ]);
-        return $app->view('admin/editUser', [
+        return $app->view('admin/createPage', [
             'title' => 'Modifier un utilisateur',
             "headerType" => 'admin',
             "slimHeader" => false,
-            "user" => $user,
+            "type" => 'user',
+            "id" => $id,
+            "formFields" => [
+                "Nom" => "text",
+                "Prénom" => "text",
+                "Email" => "email",
+                "Droits" => "select",
+            ],
         ]);
     }
 
-    public function postUsers($id) {
+    public function postUpdateUser() {
+        $userManager = new Users();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        if($userManager->update($id, $_POST, "id")["status"] == "success") {
+            header("Location: /admin/users");
+            exit;
+        }
+    }
 
+    public function deleteUser($id) {
+        $userManager = new Users();
+        if($userManager->delete($id, "id")["status"] == "success") {
+            header("Location: /admin/users");
+            exit;
+        }
     }
 
     public function viewUsager() {
@@ -117,6 +135,65 @@ class AdminController extends Controller {
         ]);
     }
 
+    public function viewCreateUsager() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer un droit',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'usager',
+            "formFields" => [
+                "Nom" => "text",
+                "Id categorie" => "number",
+                "Montant caution" => "number",
+            ]
+        ]);
+    }
+
+    public function postCreateUsager() {
+        $usagerManager = new Usager();
+        $_POST['date_carte'] = date("Y-m-d");
+        $_POST['id_carte'] = $usagerManager->getDernierId();
+        if($usagerManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/usager");
+            exit;
+        }
+    }
+
+    public function viewUpdateUsager($id) {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier un utilisateur',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            "type" => 'usager',
+            "id" => $id,    
+            "formFields" => [
+                "Nom" => "text",
+                "Id categorie" => "number",
+                "Montant caution" => "number",
+            ]
+        ]);
+    }
+
+    public function postUpdateUsager() {
+        $usagerManager = new Usager();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        if($usagerManager->update($id,$_POST, "id_carte")["status"] == "success") {
+            header("Location: /admin/usager");
+            exit;
+        }
+    }
+
+    public function deleteUsager($id) {
+        $usagerManager = new Usager();
+        if($usagerManager->delete($id, "id_carte")["status"] == "success") {
+            header("Location: /admin/usager");
+            exit;
+        }
+    }
+
     public function viewCategory() {
         $app = new App();
         $CategorieListe = new Categorie();
@@ -138,6 +215,59 @@ class AdminController extends Controller {
             ],
             "ContentsTable" => $CategorieListeFormatted 
         ]);
+    }
+
+    public function viewCreateCategory() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer une catégorie',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'category',
+            "formFields" => [
+                "Libelle categorie" => "text",
+            ]
+        ]);
+    }
+
+    public function postCreateCategory() {
+        $categorieManager = new Categorie();
+        if($categorieManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/category");
+            exit;
+        }
+    }
+
+    public function viewUpdateCategory($id) {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier une catégorie',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'category',
+            "id" => $id,
+            "formFields" => [
+                "Libelle categorie" => "text",
+            ]
+        ]);
+    }
+
+    public function postUpdateCategory() {
+        $categorieManager = new Categorie();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        if($categorieManager->update($id, $_POST, "id_categorie")["status"] == "success") {
+            header("Location: /admin/category");
+            exit;
+        }
+    }
+
+    public function deleteCategory($id) {
+        $categorieManager = new Categorie();
+        if($categorieManager->delete($id, "id_categorie")["status"] == "success") {
+            header("Location: /admin/category");
+            exit;
+        }
     }
 
     public function viewPrestation() {
@@ -162,6 +292,59 @@ class AdminController extends Controller {
             ],
             "ContentsTable" => $prestationListeFormatted
         ]);
+    }
+
+    public function viewCreatePrestation() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer une prestation',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'prestation',
+            "formFields" => [
+                "Type prestation" => "text",
+            ]
+        ]);
+    }
+
+    public function postCreatePrestation() {
+        $prestationManager = new Prestation();
+        if($prestationManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/prestation");
+            exit;
+        }
+    }
+
+    public function viewUpdatePrestation($id) {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier une prestation',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'prestation',
+            "id" => $id,
+            "formFields" => [
+                "Type prestation" => "text",
+            ]
+        ]);
+    }
+
+    public function postUpdatePrestation() {
+        $prestationManager = new Prestation();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        if($prestationManager->update($id, $_POST, "id_prestation")["status"] == "success") {
+            header("Location: /admin/prestation");
+            exit;
+        }
+    }
+
+    public function deletePrestation($id) {
+        $prestationManager = new Prestation();
+        if($prestationManager->delete($id, "id_prestation")["status"] == "success") {
+            header("Location: /admin/prestation");
+            exit;
+        }
     }
 
     public function viewTarif() {
@@ -189,6 +372,63 @@ class AdminController extends Controller {
             ],
             "ContentsTable" => $tarifListeFormatted
         ]);
+    }
+    
+    public function viewCreateTarif() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer un tarif',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'tarif',
+            "formFields" => [
+                "Id prestation" => "number",
+                "Id categorie" => "number",
+                "Prix" => "number",
+            ]
+        ]);
+    }
+
+    public function postCreateTarif() {
+        $tarifManager = new Tarif();
+        if($tarifManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/tarif");
+            exit;
+        }
+    }
+
+    public function viewUpdateTarif($id) {
+        list($id_prestation, $id_categorie) = explode('-', $id);
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier un tarif',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'tarif',
+            "id" => $id_prestation . "-" . $id_categorie,
+            "formFields" => [
+                "Prix" => "number",
+            ]
+        ]);
+    }
+
+    public function postUpdateTarif() {
+        $tarifManager = new Tarif();
+        $id = $_POST['id'];
+        list($id_prestation, $id_categorie) = explode('-', $id);
+        $_POST = array_slice($_POST, 1);
+        if($tarifManager->update($id_categorie, $_POST, "id_categorie", "id_prestation", $id_prestation)["status"] == "success") {
+            header("Location: /admin/tarif");
+            exit;
+        }
+    }
+
+    public function deleteTarif($id_prestation, $id_categorie) {
+        $tarifManager = new Tarif();
+        if($tarifManager->delete($id_prestation, $id_categorie)["status"] == "success") {
+            header("Location: /admin/tarif");
+            exit;
+        }
     }
 
     public function viewTicket() {

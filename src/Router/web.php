@@ -31,12 +31,12 @@ $router->get('/admin/droits/create', 'AdminController@viewCreateDroits');
 $router->get('/admin/depot/create', 'AdminController@viewCreateDepot');
 
 // Page de modification
-$router->get('/admin/users/update', 'AdminController@viewUpdateUser');
-$router->get('/admin/usager/update', 'AdminController@viewUpdateUsager');
-$router->get('/admin/category/update', 'AdminController@viewUpdateCategory');
-$router->get('/admin/prestation/update', 'AdminController@viewUpdatePrestation');
-$router->get('/admin/tarif/update', 'AdminController@viewUpdateTarif');
-$router->get('/admin/ticket/update', 'AdminController@viewUpdateTicket');
+$router->get('/admin/users/edit/{id}', 'AdminController@viewUpdateUser');
+$router->get('/admin/usager/edit/{id}', 'AdminController@viewUpdateUsager');
+$router->get('/admin/category/edit/{id}', 'AdminController@viewUpdateCategory');
+$router->get('/admin/prestation/edit/{id_prestation}-{id_categorie}', 'AdminController@viewUpdateTarif');
+$router->get('/admin/tarif/edit/{id}', 'AdminController@viewUpdateTarif');
+$router->get('/admin/ticket/edit/{id}', 'AdminController@viewUpdateTicket');
 $router->get('/admin/droits/edit/{id}', 'AdminController@viewUpdateDroits');
 $router->get('/admin/depot/edit/', 'AdminController@viewUpdateDepot');
 

@@ -80,6 +80,7 @@ class Database {
                 ];
             }
         } catch (Exception $e) {
+            var_dump($e->getMessage());
             return [
                 'status' => 'error',
                 'message' => "Exception : " . $e->getMessage()
@@ -100,7 +101,7 @@ class Database {
                 'status' => 'error',
                 'message' => "La constante TABLE n'est pas définie."
             ];
-        }
+        }, $secondaryKey = null, $id2 = null
     
         // Détection automatique de la clé primaire
         if (!$primaryKey) {
@@ -114,7 +115,9 @@ class Database {
             // Exclure la clé primaire de la requête SET
             unset($array[$primaryKey]);
             // Construire la requête SQL
-            $query = "UPDATE " . static::TABLE . " SET " . $this->preparingRequete($array) . " WHERE $primaryKey = :$primaryKey";
+            $query = "UPDATE " . static::TABLE . " SET " . $this->preparingRequete($array) . " WHERE $primaryKey = :$primaryKey" . 
+            (is_null($secondaryKey) ? "" : " AND $secondaryKey = :$secondaryKey");
+            var_dump($query);
             $stmt = $this->pdo->prepare($query);
             
             // Lier les valeurs sauf la clé primaire
@@ -123,8 +126,11 @@ class Database {
             }
     
             // Lier la clé primaire séparément
-            $stmt->bindValue(":$primaryKey", $id, PDO::PARAM_INT);
-    
+            $stmt->bindValue(":$primaryKey", $id);
+            
+            if(!is_null($secondaryKey)) {
+                $stmt->bindValue(":$secondaryKey", $id2);
+            }
             if ($stmt->execute()) {
                 return [
                     'status' => 'success',
@@ -145,7 +151,7 @@ class Database {
         }
     }    
 
-    public function delete($id, $primaryKey = null) {
+    public function delete($id, $primaryKey = null, $secondaryKey = null, $id2 = null) {
         if (!defined('static::TABLE')) {
             return [
                 'status' => 'error',
@@ -162,9 +168,10 @@ class Database {
         }
     
         try {
-            $query = "DELETE FROM " . static::TABLE . " WHERE $primaryKey = :$primaryKey";
+            $query = "DELETE FROM " . static::TABLE . " WHERE $primaryKey = :$primaryKey" . 
+            (is_null($secondaryKey) ? "" : " AND $secondaryKey = :$secondaryKey");
             $stmt = $this->pdo->prepare($query);
-            $stmt->bindValue(":$primaryKey", $id, PDO::PARAM_INT);
+            $stmt->bindValue(":$primaryKey", $id);
     
             if ($stmt->execute()) {
                 return [
