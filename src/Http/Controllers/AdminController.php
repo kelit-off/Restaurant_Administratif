@@ -457,6 +457,62 @@ class AdminController extends Controller {
         ]);
     }
 
+    public function viewCreateTicket() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer un ticket',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'ticket',
+            "formFields" => [
+                "Id carte" => "text",
+                "Date achat" => "date",
+            ]
+        ]);
+    }
+
+    public function postCreateTicket() {
+        $ticketManager = new Ticket();
+        $_POST['id_ticket'] = $ticketManager->getDernierId();
+        if($ticketManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/ticket");
+            exit;
+        }
+    }
+
+    public function viewUpdateTicket($id) {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier un ticket',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'ticket',
+            "id" => $id,
+            "formFields" => [
+                "Id carte" => "text",
+                "Date achat" => "date",
+            ]
+        ]);
+    }
+
+    public function postUpdateTicket() {
+        $ticketManager = new Ticket();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        if($ticketManager->update($id, $_POST, "id_ticket")["status"] == "success") {
+            header("Location: /admin/ticket");
+            exit;
+        }
+    }
+
+    public function deleteTicket($id) {
+        $ticketManager = new Ticket();
+        if($ticketManager->delete($id, "id_ticket")["status"] == "success") {
+            header("Location: /admin/ticket");
+            exit;
+        }
+    }
+
     public function viewDroits() {
         $app = new App();
         $droitsManager = new Droits();
@@ -565,5 +621,64 @@ class AdminController extends Controller {
             ],
             "ContentsTable" => $depotListeFormatted
         ]);
+    }
+
+    public function viewCreateDepot() {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer un depot',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'depot',
+            "formFields" => [
+                "Id carte" => "text",
+                "Date depot" => "date",
+                "Montant" => "number",
+            ]
+        ]);
+    }
+
+    public function postCreateDepot() {
+        $depotManager = new Depot();
+        if($depotManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/depot");
+            exit;
+        }
+    }
+
+    public function viewUpdateDepot($id) {
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier un depot',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'depot',
+            "id" => $id,
+            "formFields" => [
+                "Id carte" => "text",
+                "Date depot" => "date",
+                "Montant" => "number",
+            ]
+        ]);
+    }
+
+    public function postUpdateDepot() {
+        $depotManager = new Depot();
+        $id = $_POST['id'];
+        unset($_POST['id']);
+        unset($_POST['id_carte']);
+        var_dump($id);
+        if($depotManager->update($id, $_POST, "id_carte", "date_depot", $_POST['date_depot'])["status"] == "success") {
+            header("Location: /admin/depot");
+            exit;
+        }
+    }
+
+    public function deleteDepot($id) {
+        $depotManager = new Depot();
+        if($depotManager->delete($id, "id_carte")["status"] == "success") {
+            header("Location: /admin/depot");
+            exit;
+        }
     }
 }

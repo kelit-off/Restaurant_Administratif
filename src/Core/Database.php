@@ -88,7 +88,7 @@ class Database {
         }
     }
 
-    public function update($id, $array = [], $primaryKey = null) {
+    public function update($id, $array = [], $primaryKey = null, $secondaryKey = null, $id2 = null) {
         if (empty($array)) {
             return [
                 'status' => 'error',
@@ -101,7 +101,7 @@ class Database {
                 'status' => 'error',
                 'message' => "La constante TABLE n'est pas définie."
             ];
-        }, $secondaryKey = null, $id2 = null
+        }
     
         // Détection automatique de la clé primaire
         if (!$primaryKey) {
@@ -117,8 +117,8 @@ class Database {
             // Construire la requête SQL
             $query = "UPDATE " . static::TABLE . " SET " . $this->preparingRequete($array) . " WHERE $primaryKey = :$primaryKey" . 
             (is_null($secondaryKey) ? "" : " AND $secondaryKey = :$secondaryKey");
-            var_dump($query);
             $stmt = $this->pdo->prepare($query);
+
             
             // Lier les valeurs sauf la clé primaire
             foreach ($array as $key => $value) {

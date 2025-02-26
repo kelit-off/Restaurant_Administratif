@@ -38,7 +38,7 @@ $router->get('/admin/prestation/edit/{id_prestation}-{id_categorie}', 'AdminCont
 $router->get('/admin/tarif/edit/{id}', 'AdminController@viewUpdateTarif');
 $router->get('/admin/ticket/edit/{id}', 'AdminController@viewUpdateTicket');
 $router->get('/admin/droits/edit/{id}', 'AdminController@viewUpdateDroits');
-$router->get('/admin/depot/edit/', 'AdminController@viewUpdateDepot');
+$router->get('/admin/depot/edit/{id}', 'AdminController@viewUpdateDepot');
 
 // Page du post
 $router->post('/admin/users/create', 'AdminController@postCreateUser');
