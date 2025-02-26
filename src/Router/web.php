@@ -20,4 +20,52 @@ $router->get('/admin/ticket', 'AdminController@viewTicket');
 $router->get('/admin/droits', 'AdminController@viewDroits');
 $router->get('/admin/depot', 'AdminController@viewDepot');
 
+// Page de creation
+$router->get('/admin/users/create', 'AdminController@viewCreateUser');
+$router->get('/admin/usager/create', 'AdminController@viewCreateUsager');
+$router->get('/admin/category/create', 'AdminController@viewCreateCategory');
+$router->get('/admin/prestation/create', 'AdminController@viewCreatePrestation');
+$router->get('/admin/tarif/create', 'AdminController@viewCreateTarif');
+$router->get('/admin/ticket/create', 'AdminController@viewCreateTicket');
+$router->get('/admin/droits/create', 'AdminController@viewCreateDroits');
+$router->get('/admin/depot/create', 'AdminController@viewCreateDepot');
+
+// Page de modification
+$router->get('/admin/users/update', 'AdminController@viewUpdateUser');
+$router->get('/admin/usager/update', 'AdminController@viewUpdateUsager');
+$router->get('/admin/category/update', 'AdminController@viewUpdateCategory');
+$router->get('/admin/prestation/update', 'AdminController@viewUpdatePrestation');
+$router->get('/admin/tarif/update', 'AdminController@viewUpdateTarif');
+$router->get('/admin/ticket/update', 'AdminController@viewUpdateTicket');
+$router->get('/admin/droits/edit/{id}', 'AdminController@viewUpdateDroits');
+$router->get('/admin/depot/edit/', 'AdminController@viewUpdateDepot');
+
+// Page du post
+$router->post('/admin/users/create', 'AdminController@postCreateUser');
+$router->post('/admin/usager/create', 'AdminController@postCreateUsager');
+$router->post('/admin/category/create', 'AdminController@postCreateCategory');
+$router->post('/admin/prestation/create', 'AdminController@postCreatePrestation');
+$router->post('/admin/tarif/create', 'AdminController@postCreateTarif');
+$router->post('/admin/ticket/create', 'AdminController@postCreateTicket');
+$router->post('/admin/droits/create', 'AdminController@postCreateDroits');
+$router->post('/admin/depot/create', 'AdminController@postCreateDepot');
+
+$router->post('/admin/users/update', 'AdminController@postUpdateUser');
+$router->post('/admin/usager/update', 'AdminController@postUpdateUsager');
+$router->post('/admin/category/update', 'AdminController@postUpdateCategory');
+$router->post('/admin/prestation/update', 'AdminController@postUpdatePrestation');
+$router->post('/admin/tarif/update', 'AdminController@postUpdateTarif');
+$router->post('/admin/ticket/update', 'AdminController@postUpdateTicket');
+$router->post('/admin/droits/update', 'AdminController@postUpdateDroits');
+$router->post('/admin/depot/update', 'AdminController@postUpdateDepot');
+
+$router->get('/admin/users/{id}/delete', 'AdminController@deleteUser');
+$router->get('/admin/usager/{id}/delete', 'AdminController@deleteUsager');
+$router->get('/admin/category/{id}/delete', 'AdminController@deleteCategory');
+$router->get('/admin/prestation/{id}/delete', 'AdminController@deletePrestation');
+$router->get('/admin/tarif/{id_prestation}-{id_categorie}/delete', 'AdminController@deleteTarif');
+$router->get('/admin/ticket/{id}/delete', 'AdminController@deleteTicket');
+$router->get('/admin/droits/{id}/delete', 'AdminController@deleteDroits');
+$router->get('/admin/depot/{id}/delete', 'AdminController@deleteDepot');
+
 $router->run();

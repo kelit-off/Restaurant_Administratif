@@ -244,6 +244,59 @@ class AdminController extends Controller {
 
     public function viewCreateDroits() {
         $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Créer un droit',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'droits',
+            "formFields" => [
+                "Libelle droits" => "text",
+            ]
+        ]);
+    }
+
+    public function postCreateDroits() {
+        $app = new App();
+        $droitsManager = new Droits();
+
+        if($droitsManager->insert($_POST)["status"] == "success") {
+            header("Location: /admin/droits");
+            exit;
+        }
+    }
+
+    public function viewUpdateDroits($id) {
+        var_dump($id);
+        $app = new App();
+        return $app->view('admin/createPage', [
+            'title' => 'Modifier un droit',
+            "headerType" => 'admin',
+            "slimHeader" => false,
+            'type' => 'droits',
+            "formFields" => [
+                "Libelle droits" => "text",
+            ],
+            "id" => $id
+        ]);
+    }
+
+    public function postUpdateDroits() {
+        $droitsManager = new Droits();
+        $id = $_POST['id'];
+        $_POST = array_slice($_POST, 1);
+        
+        if($droitsManager->update($id,$_POST, "id_droits")["status"] == "success") {
+            header("Location: /admin/droits");
+            exit;
+        }
+    }
+
+    public function deleteDroits($id) {
+        $droitsManager = new Droits();
+        if($droitsManager->delete($id, "id_droits")["status"] == "success") {
+            header("Location: /admin/droits");
+            exit;
+        }
     }
 
     public function viewDepot() {

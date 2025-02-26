@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Exception;
 use PDO;
 use PDOException;
 
@@ -51,19 +52,151 @@ class Database {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function update() {
-
+    public function insert($array = []) {
+        if (empty($array)) {
+            return [
+                'status' => 'error',
+                'message' => "Il n'y a aucune donnée à insérer."
+            ];
+        }
+    
+        try {
+            $query = "INSERT INTO ". static::TABLE ." SET " . $this->preparingRequete($array);
+            $stmt = $this->pdo->prepare($query);
+            
+            foreach ($array as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+    
+            if ($stmt->execute()) {
+                return [
+                    'status' => 'success',
+                    'message' => "Données insérées avec succès."
+                ];
+            } else {
+                return [
+                    'status' => 'error',
+                    'message' => "Erreur lors de l'insertion."
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'status' => 'error',
+                'message' => "Exception : " . $e->getMessage()
+            ];
+        }
     }
 
-    public function delete() {
+    public function update($id, $array = [], $primaryKey = null) {
+        if (empty($array)) {
+            return [
+                'status' => 'error',
+                'message' => "Aucune donnée à mettre à jour."
+            ];
+        }
+    
+        if (!defined('static::TABLE')) {
+            return [
+                'status' => 'error',
+                'message' => "La constante TABLE n'est pas définie."
+            ];
+        }
+    
+        // Détection automatique de la clé primaire
+        if (!$primaryKey) {
+            return [
+                'status' => 'error',
+                'message' => "Impossible de trouver la clé primaire."
+            ];
+        }
+    
+        try {
+            // Exclure la clé primaire de la requête SET
+            unset($array[$primaryKey]);
+            // Construire la requête SQL
+            $query = "UPDATE " . static::TABLE . " SET " . $this->preparingRequete($array) . " WHERE $primaryKey = :$primaryKey";
+            $stmt = $this->pdo->prepare($query);
+            
+            // Lier les valeurs sauf la clé primaire
+            foreach ($array as $key => $value) {
+                $stmt->bindValue(":$key", $value);
+            }
+    
+            // Lier la clé primaire séparément
+            $stmt->bindValue(":$primaryKey", $id, PDO::PARAM_INT);
+    
+            if ($stmt->execute()) {
+                return [
+                    'status' => 'success',
+                    'message' => "Données mises à jour avec succès."
+                ];
+            } else {
+                return [
+                    'status' => 'error',
+                    'message' => "Erreur lors de la mise à jour."
+                ];
+            }
+        } catch (PDOException $e) {
+            var_dump($e->getMessage());
+            return [
+                'status' => 'error',
+                'message' => "Exception SQL : " . $e->getMessage()
+            ];
+        }
+    }    
 
+    public function delete($id, $primaryKey = null) {
+        if (!defined('static::TABLE')) {
+            return [
+                'status' => 'error',
+                'message' => "La constante TABLE n'est pas définie."
+            ];
+        }
+    
+        // Détection automatique de la clé primaire
+        if (!$primaryKey) {
+            return [
+                'status' => 'error',
+                'message' => "Impossible de trouver la clé primaire."
+            ];
+        }
+    
+        try {
+            $query = "DELETE FROM " . static::TABLE . " WHERE $primaryKey = :$primaryKey";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindValue(":$primaryKey", $id, PDO::PARAM_INT);
+    
+            if ($stmt->execute()) {
+                return [
+                    'status' => 'success',
+                    'message' => "Enregistrement supprimé avec succès."
+                ];
+            } else {
+                return [
+                    'status' => 'error',
+                    'message' => "Erreur lors de la suppression."
+                ];
+            }
+        } catch (PDOException $e) {
+            return [
+                'status' => 'error',
+                'message' => "Exception SQL : " . $e->getMessage()
+            ];
+        }
     }
 
     private function preparingRequete($data) {
-        $fields = array_keys($data);
-        $inter = array_map(function($field) {
-            return "$field = :$field";
-        }, $fields);
-        return implode(', ', $inter);
+        return implode(', ', array_map(fn($field) => "$field = :$field", array_keys($data)));
     }
+
+    private function detectPrimaryKey($data) {
+        foreach (array_keys($data) as $key) {
+            if (strpos($key, 'id_') === 0) {
+                var_dump($key);
+                return $key;
+            }
+        }
+        return null; // Aucune clé trouvée
+    }
+    
 }

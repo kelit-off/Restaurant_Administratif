@@ -29,7 +29,7 @@ include_once 'Views/partials/header.view.php';
                         <td class="px-6 py-4">
                             <?php if(!empty($ContentTable['id'])) {?>
                                 <a href="/admin/<?=$type?>/edit/<?= $ContentTable['id'] ?>" class="text-blue-600 hover:underline">Modifier</a>
-                                <button data-id="<?= $ContentTable['id'] ?>" data-url="<?=$type?>" class="ml-4 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">Supprimer</button>
+                                <a href="/admin/<?=$type?>/<?= $ContentTable['id']?>/delete" class="ml-4 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">Supprimer</a>
                             <?php } elseif(isset($ContentTable['id_prestation']) && isset($ContentTable['id_categorie'])) {?>
                                 <a href="/admin/tarif/edit/<?= $ContentTable['id_prestation'] ?>-<?=$ContentTable['id_categorie'] ?>" class="text-blue-600 hover:underline">Modifier</a>
                                 <button data-id-prestataire="<?= $ContentTable['id_prestation'] ?>" data-id-category="<?=$ContentTable['id_categorie'] ?>" data-url="<?=$type?>" class="ml-4 px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700">Supprimer</button>

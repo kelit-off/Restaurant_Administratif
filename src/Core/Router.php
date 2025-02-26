@@ -5,7 +5,6 @@ namespace Core;
 class Router {
     private $routes = [];
 
-
     public function get($uri, $controller) {
         $this->routes['GET'][$uri] = $controller;
     }
@@ -16,33 +15,41 @@ class Router {
 
     public function run() {
         $method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    
-        if (isset($this->routes[$method][$uri])) {
-            $action = explode('@', $this->routes[$method][$uri]);
-            $controller = "Http\\Controllers\\".$action[0]; 
-            $method = $action[1];
-            
-            // Inclure manuellement le contrôleur si l'autoloading n'est pas configuré
-            $controllerPath = __DIR__ . '/../Http/Controllers/' . $action[0] . '.php';
-            
-            if (file_exists($controllerPath)) {
-                require_once $controllerPath;  // Inclure le fichier du contrôleur
-                if (class_exists($controller)) {
-                    $instance = new $controller();
-                    if (method_exists($instance, $method)) {
-                        $instance->$method();
+        $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+
+        foreach ($this->routes[$method] as $route => $controller) {
+            $routePattern = preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9-_]+)', trim($route, '/'));
+            if (preg_match("#^$routePattern$#", $uri, $matches)) {
+                array_shift($matches); // Enlever le premier élément (URI complète)
+
+                $action = explode('@', $controller);
+                $controllerClass = "Http\\Controllers\\" . $action[0];
+                $method = $action[1];
+
+                $controllerPath = __DIR__ . '/../Http/Controllers/' . $action[0] . '.php';
+
+                if (file_exists($controllerPath)) {
+                    require_once $controllerPath;
+                    if (class_exists($controllerClass)) {
+                        $instance = new $controllerClass();
+                        if (method_exists($instance, $method)) {
+                            $instance->$method(...$matches);
+                            return;
+                        } else {
+                            echo "Méthode $method non trouvée dans $controllerClass";
+                            return;
+                        }
                     } else {
-                        echo "Méthode $method non trouvée dans $controller";
+                        echo "Contrôleur $controllerClass non trouvé";
+                        return;
                     }
                 } else {
-                    echo "Contrôleur $controller non trouvé";
+                    echo "Fichier du contrôleur $controllerPath non trouvé";
+                    return;
                 }
-            } else {
-                echo "Fichier du contrôleur $controllerPath non trouvé";
             }
-        } else {
-            echo "Route non trouvée";
         }
-    }    
+
+        echo "Route non trouvée";
+    }
 }
