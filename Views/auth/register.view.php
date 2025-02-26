@@ -8,11 +8,11 @@ include_once 'Views/partials/header.view.php';
 
             <div class="mb-3">
                 <label for="floatingFirstName" class="block text-sm font-medium text-gray-700">Prénom</label>
-                <input type="text" id="floatingFirstName" name="first_name" placeholder="Marc" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="floatingFirstName" name="prenom" placeholder="Marc" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div class="mb-3">
                 <label for="floatingLastName" class="block text-sm font-medium text-gray-700">Nom de famille</label>
-                <input type="text" id="floatingLastName" name="last_name" placeholder="Dupuis" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <input type="text" id="floatingLastName" name="nom" placeholder="Dupuis" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
             </div>
             <div class="mb-3">
                 <label for="floatingEmail" class="block text-sm font-medium text-gray-700">Adresse mail</label>

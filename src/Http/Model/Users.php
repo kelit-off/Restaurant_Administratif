@@ -5,16 +5,18 @@ namespace Http\Model;
 use Core\Database;
 
 class Users extends Database {
+    const TABLE = "users";
+
     protected $fillable = [
-        "first_name",
-        "last_name",
+        "prenom",
+        "nom",
         "email",
         "password",
     ];
 
     public function create(array $data) {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-        $query = "INSERT INTO users (first_name, last_name, email, password, droit) VALUES (:first_name, :last_name, :email, :password, 0)";
+        $query = "INSERT INTO users (prenom, nom, email, password, droits) VALUES (:prenom, :nom, :email, :password, 2)";
 
         return $this->query($query, $data);
     }
@@ -38,7 +40,7 @@ class Users extends Database {
         foreach ($ListeUsers as $user) {
             $ListeUsersDroit[] = [
                 "user" => $user,
-                "droit" => $ListeDroit[array_search($user['droit'], array_column($ListeDroit, 'id_droits'))],
+                "droits" => $ListeDroit[array_search($user['droits'], array_column($ListeDroit, 'id_droits'))],
             ];
         }
         return $ListeUsersDroit;

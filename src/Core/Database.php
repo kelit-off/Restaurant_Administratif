@@ -46,8 +46,24 @@ class Database {
         return $result !== false ? $result : null;
     }
 
-    public function get($query, array $params = []) {
-        $stmt = $this->query($query, $params);
+    public function getListe() {
+        $stmt = $this->query("SELECT * FROM " . static::TABLE ."");
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function update() {
+
+    }
+
+    public function delete() {
+
+    }
+
+    private function preparingRequete($data) {
+        $fields = array_keys($data);
+        $inter = array_map(function($field) {
+            return "$field = :$field";
+        }, $fields);
+        return implode(', ', $inter);
     }
 }

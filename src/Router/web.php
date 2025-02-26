@@ -15,5 +15,9 @@ $router->get('/admin/users', 'AdminController@viewUsers');
 $router->get('/admin/usager', 'AdminController@viewUsager');
 $router->get('/admin/category', 'AdminController@viewCategory');
 $router->get('/admin/prestation', 'AdminController@viewPrestation');
+$router->get('/admin/tarif', 'AdminController@viewTarif');
+$router->get('/admin/ticket', 'AdminController@viewTicket');
+$router->get('/admin/droits', 'AdminController@viewDroits');
+$router->get('/admin/depot', 'AdminController@viewDepot');
 
 $router->run();
